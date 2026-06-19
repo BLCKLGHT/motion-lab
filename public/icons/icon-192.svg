@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="42" fill="#07090d"/>
+  <path d="M34 130a68 68 0 0 1 124 0" fill="none" stroke="#1c2938" stroke-width="18" stroke-linecap="round"/>
+  <path d="M34 130a68 68 0 0 1 97-61" fill="none" stroke="#1da1ff" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="96" cy="124" r="13" fill="#ffffff"/>
+  <path d="M96 124l43-62" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <text x="96" y="164" fill="#8fb8d8" font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">KE</text>
+</svg>

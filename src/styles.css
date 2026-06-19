@@ -1,0 +1,615 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  background: #07090d;
+  color: #f8fbff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --bg: #07090d;
+  --panel: #111821;
+  --panel-strong: #172232;
+  --line: #26384c;
+  --muted: #a9b5c3;
+  --accent: #1da1ff;
+  --accent-soft: rgba(29, 161, 255, 0.16);
+  --green: #22c55e;
+  --amber: #facc15;
+  --orange: #fb923c;
+  --red: #ef4444;
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(29, 161, 255, 0.2), transparent 42%),
+    linear-gradient(180deg, #0a0e14 0%, #07090d 46%, #05070a 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell {
+  width: min(1180px, 100%);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 2px 12px;
+}
+
+.top-bar p,
+.settings-panel__header p {
+  margin: 0 0 3px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.top-bar h1,
+.settings-panel__header h2 {
+  margin: 0;
+  color: white;
+  font-size: clamp(1.1rem, 4vw, 1.7rem);
+  letter-spacing: 0;
+}
+
+.icon-button {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #e8f5ff;
+  background: rgba(17, 24, 33, 0.88);
+  box-shadow: var(--shadow);
+}
+
+.gps-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(70, 100, 132, 0.7);
+  border-radius: 8px;
+  color: #e8f5ff;
+  background: rgba(14, 22, 31, 0.82);
+}
+
+.gps-status svg {
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.gps-status strong,
+.gps-status span {
+  display: block;
+}
+
+.gps-status strong {
+  font-size: 0.96rem;
+}
+
+.gps-status span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.gps-status--warning {
+  border-color: rgba(250, 204, 21, 0.62);
+}
+
+.gps-status--warning svg {
+  color: var(--amber);
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.speed-display {
+  position: relative;
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(67, 104, 142, 0.72);
+  border-radius: 8px;
+  background:
+    linear-gradient(150deg, rgba(29, 161, 255, 0.14), transparent 44%),
+    radial-gradient(circle at 50% 70%, rgba(29, 161, 255, 0.2), transparent 40%),
+    #0b1118;
+  box-shadow: var(--shadow);
+}
+
+.speed-display__arc {
+  position: absolute;
+  width: min(82vw, 450px);
+  aspect-ratio: 1;
+  border: 16px solid rgba(29, 161, 255, 0.13);
+  border-top-color: rgba(29, 161, 255, 0.85);
+  border-right-color: rgba(29, 161, 255, 0.44);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 22px rgba(29, 161, 255, 0.2));
+  transform: rotate(-42deg);
+}
+
+.speed-display__eyebrow,
+.speed-display__unit {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.speed-display__eyebrow {
+  align-self: end;
+  font-size: clamp(0.78rem, 3vw, 1rem);
+}
+
+.speed-display__number {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  color: #ffffff;
+  font-size: clamp(7rem, 29vw, 14rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.86;
+  text-shadow: 0 0 34px rgba(29, 161, 255, 0.26);
+}
+
+.speed-display__unit {
+  align-self: start;
+  color: #d6e9f8;
+  font-size: clamp(1rem, 4vw, 1.35rem);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-card,
+.comparison-card,
+.energy-gauge,
+.energy-graph {
+  border: 1px solid rgba(59, 82, 108, 0.72);
+  border-radius: 8px;
+  background: rgba(17, 24, 33, 0.84);
+  box-shadow: var(--shadow);
+}
+
+.metric-card {
+  min-height: 92px;
+  padding: 13px;
+}
+
+.metric-card__label,
+.metric-card__unit,
+.section-heading span,
+.comparison-card span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.metric-card__value {
+  display: block;
+  margin-top: 8px;
+  color: white;
+  font-size: clamp(1.6rem, 7vw, 2.35rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.95;
+}
+
+.metric-card__unit {
+  display: block;
+  margin-top: 6px;
+  text-transform: none;
+}
+
+.metric-card--accent {
+  background: linear-gradient(150deg, rgba(29, 161, 255, 0.22), rgba(17, 24, 33, 0.9));
+}
+
+.metric-card--warning {
+  border-color: rgba(250, 204, 21, 0.66);
+}
+
+.comparison-card {
+  margin-top: 12px;
+  padding: 14px;
+  background: linear-gradient(140deg, rgba(29, 161, 255, 0.14), rgba(17, 24, 33, 0.82));
+}
+
+.comparison-card strong {
+  display: block;
+  margin-top: 6px;
+  font-size: clamp(1.05rem, 4vw, 1.5rem);
+  line-height: 1.18;
+}
+
+.energy-gauge,
+.energy-graph {
+  margin-top: 12px;
+  padding: 14px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.section-heading strong {
+  color: #eaf7ff;
+  font-variant-numeric: tabular-nums;
+}
+
+.energy-gauge__track {
+  position: relative;
+  height: 20px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--green) 0 18%, var(--amber) 18% 38%, var(--orange) 38% 64%, var(--red) 64% 100%);
+}
+
+.energy-gauge__track::after {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 10, 13, 0.62);
+  content: "";
+}
+
+.energy-gauge__fill {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(29, 161, 255, 0.95));
+  box-shadow: 0 0 18px rgba(29, 161, 255, 0.55);
+  transition: width 360ms ease;
+}
+
+.energy-gauge__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.energy-graph svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 190px;
+}
+
+.energy-graph__grid {
+  fill: none;
+  stroke: rgba(169, 181, 195, 0.28);
+  stroke-width: 1.5;
+}
+
+.energy-graph__quad-guide,
+.energy-graph__marker-line {
+  stroke: rgba(169, 181, 195, 0.16);
+  stroke-dasharray: 5 7;
+}
+
+.energy-graph__curve {
+  fill: none;
+  stroke: url("#curveGradient");
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+.energy-graph__marker {
+  fill: #ffffff;
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+
+.energy-graph text {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.energy-graph p {
+  margin: 6px 0 0;
+  color: #d9e8f4;
+  font-weight: 800;
+}
+
+.trip-controls {
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr 0.58fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 54px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #eaf7ff;
+  background: rgba(23, 34, 50, 0.96);
+  font-weight: 900;
+}
+
+.control-button--primary {
+  border-color: rgba(29, 161, 255, 0.8);
+  background: linear-gradient(135deg, #0a74c9, #1da1ff);
+  color: #ffffff;
+}
+
+.settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(3, 5, 8, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.settings-panel {
+  width: min(440px, 100%);
+  min-height: 100%;
+  padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  border-left: 1px solid var(--line);
+  background: #0c1118;
+  box-shadow: var(--shadow);
+}
+
+.settings-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.settings-field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.settings-field input {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: white;
+  background: var(--panel);
+  padding: 0 13px;
+  font-size: 1.1rem;
+}
+
+.settings-field__with-unit {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.settings-meta span {
+  color: var(--muted);
+}
+
+.settings-panel__save {
+  width: 100%;
+}
+
+.settings-disclaimer {
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .dashboard-grid {
+    grid-template-columns: minmax(330px, 0.9fr) minmax(420px, 1.1fr);
+  }
+
+  .speed-display {
+    min-height: 100%;
+  }
+
+  .app-shell {
+    padding-top: 18px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 540px) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: minmax(230px, 0.9fr) minmax(330px, 1.1fr) minmax(210px, 0.82fr);
+    grid-template-rows: auto minmax(0, 1fr) 58px;
+    grid-template-areas:
+      "top top top"
+      "speed metrics graph"
+      "gps controls gauge";
+    gap: 8px 12px;
+    padding: 8px max(14px, env(safe-area-inset-right)) 8px max(14px, env(safe-area-inset-left));
+    overflow: hidden;
+  }
+
+  .top-bar h1 {
+    font-size: 1.36rem;
+  }
+
+  .top-bar p {
+    font-size: 0.68rem;
+  }
+
+  .top-bar .icon-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .top-bar {
+    grid-area: top;
+    padding-bottom: 0;
+  }
+
+  .gps-status {
+    grid-area: gps;
+    margin-bottom: 0;
+    min-height: 0;
+  }
+
+  .dashboard-grid {
+    display: contents;
+  }
+
+  .dashboard-grid__speed {
+    grid-area: speed;
+  }
+
+  .metric-grid {
+    grid-area: metrics;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .speed-display {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .speed-display__arc {
+    width: min(26vw, 300px);
+    border-width: 12px;
+  }
+
+  .speed-display__number {
+    font-size: clamp(5.4rem, 14vw, 8rem);
+  }
+
+  .speed-display__unit {
+    font-size: 1.05rem;
+  }
+
+  .metric-card {
+    min-height: 78px;
+    padding: 10px;
+  }
+
+  .metric-card__value {
+    font-size: 1.55rem;
+  }
+
+  .comparison-card {
+    display: none;
+  }
+
+  .energy-gauge {
+    grid-area: gauge;
+    margin-top: 0;
+    padding: 8px;
+  }
+
+  .energy-gauge .section-heading {
+    margin-bottom: 6px;
+  }
+
+  .energy-gauge__track {
+    height: 15px;
+  }
+
+  .energy-gauge__labels {
+    display: none;
+  }
+
+  .energy-graph {
+    grid-area: graph;
+    margin-top: 0;
+    padding: 10px;
+  }
+
+  .energy-graph svg {
+    min-height: 0;
+    max-height: 178px;
+  }
+
+  .energy-graph p {
+    font-size: 0.82rem;
+    line-height: 1.15;
+  }
+
+  .trip-controls {
+    position: static;
+    grid-area: controls;
+    align-self: stretch;
+    margin-top: 0;
+  }
+
+  .trip-controls .control-button {
+    min-height: 50px;
+  }
+}

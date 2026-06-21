@@ -4,12 +4,15 @@ import type { GpsReading } from "../types/dashboard";
 interface GpsStatusProps {
   reading: GpsReading;
   compact?: boolean;
+  demo?: boolean;
 }
 
-export function GpsStatus({ reading, compact = false }: GpsStatusProps) {
+export function GpsStatus({ reading, compact = false, demo = false }: GpsStatusProps) {
   const isWarning = reading.status === "poor" || reading.status === "denied" || reading.status === "unavailable";
   const label =
-    reading.status === "excellent"
+    demo
+      ? "Demo Drive"
+      : reading.status === "excellent"
       ? "Excellent Accuracy"
       : reading.status === "locked"
         ? "Locked"
@@ -30,7 +33,11 @@ export function GpsStatus({ reading, compact = false }: GpsStatusProps) {
         <strong>{label}</strong>
         {!compact ? (
           <span>
-            {reading.accuracy !== null ? `${Math.round(reading.accuracy)} m accuracy` : reading.message ?? "Searching for GPS..."}
+            {demo
+              ? "Simulated highway route"
+              : reading.accuracy !== null
+                ? `${Math.round(reading.accuracy)} m accuracy`
+                : reading.message ?? "Searching for GPS..."}
           </span>
         ) : null}
       </div>

@@ -8,17 +8,18 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --bg: #07090d;
-  --panel: #111821;
-  --panel-strong: #172232;
-  --line: #26384c;
-  --muted: #a9b5c3;
-  --accent: #1da1ff;
-  --accent-soft: rgba(29, 161, 255, 0.16);
-  --green: #22c55e;
-  --amber: #facc15;
-  --orange: #fb923c;
-  --red: #ef4444;
-  --shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
+  --panel: #101721;
+  --panel-strong: #151f2b;
+  --line: #263646;
+  --muted: #a8b3c0;
+  --soft: #dce7f1;
+  --accent: #7cc7ff;
+  --green: #5aa36a;
+  --amber: #bfa34b;
+  --orange: #bf7b46;
+  --red: #b94a4a;
+  --maroon: #7f3037;
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
 }
 
 * {
@@ -34,8 +35,8 @@ body {
   min-height: 100%;
   margin: 0;
   background:
-    radial-gradient(circle at 50% -20%, rgba(29, 161, 255, 0.2), transparent 42%),
-    linear-gradient(180deg, #0a0e14 0%, #07090d 46%, #05070a 100%);
+    radial-gradient(circle at 50% -24%, rgba(124, 199, 255, 0.16), transparent 42%),
+    linear-gradient(180deg, #0a0e14 0%, #07090d 52%, #05070a 100%);
 }
 
 button,
@@ -48,7 +49,7 @@ button {
 }
 
 .app-shell {
-  width: min(1180px, 100%);
+  width: min(1120px, 100%);
   min-height: 100svh;
   margin: 0 auto;
   padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom))
@@ -59,7 +60,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
   padding: 4px 2px 12px;
 }
 
@@ -67,8 +68,8 @@ button {
 .settings-panel__header p {
   margin: 0 0 3px;
   color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 850;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -76,15 +77,20 @@ button {
 .top-bar h1,
 .settings-panel__header h2 {
   margin: 0;
-  color: white;
-  font-size: clamp(1.1rem, 4vw, 1.7rem);
+  color: #ffffff;
+  font-size: clamp(1.18rem, 4.4vw, 1.85rem);
   letter-spacing: 0;
+}
+
+.top-bar__actions {
+  display: flex;
+  gap: 8px;
 }
 
 .icon-button {
   display: grid;
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -93,17 +99,33 @@ button {
   box-shadow: var(--shadow);
 }
 
+.icon-button--active {
+  border-color: rgba(124, 199, 255, 0.8);
+  background: rgba(124, 199, 255, 0.18);
+}
+
+.drive-dashboard {
+  display: grid;
+  gap: 12px;
+}
+
 .gps-status {
   display: flex;
   align-items: center;
   gap: 10px;
   min-height: 56px;
-  margin-bottom: 12px;
   padding: 10px 12px;
-  border: 1px solid rgba(70, 100, 132, 0.7);
+  border: 1px solid rgba(70, 100, 132, 0.68);
   border-radius: 8px;
   color: #e8f5ff;
-  background: rgba(14, 22, 31, 0.82);
+  background: rgba(14, 22, 31, 0.76);
+  box-shadow: var(--shadow);
+}
+
+.gps-status--compact {
+  justify-self: start;
+  min-height: 38px;
+  padding: 8px 11px;
 }
 
 .gps-status svg {
@@ -117,7 +139,7 @@ button {
 }
 
 .gps-status strong {
-  font-size: 0.96rem;
+  font-size: 0.92rem;
 }
 
 .gps-status span {
@@ -126,92 +148,216 @@ button {
 }
 
 .gps-status--warning {
-  border-color: rgba(250, 204, 21, 0.62);
+  border-color: rgba(191, 163, 75, 0.72);
 }
 
 .gps-status--warning svg {
   color: var(--amber);
 }
 
-.dashboard-grid {
-  display: grid;
-  gap: 12px;
-}
-
-.speed-display {
-  position: relative;
-  display: grid;
-  min-height: 280px;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid rgba(67, 104, 142, 0.72);
+.energy-hero,
+.reaction-panel,
+.risk-band,
+.multiplier-strip,
+.metric-card,
+.mini-chart {
+  border: 1px solid rgba(59, 82, 108, 0.72);
   border-radius: 8px;
-  background:
-    linear-gradient(150deg, rgba(29, 161, 255, 0.14), transparent 44%),
-    radial-gradient(circle at 50% 70%, rgba(29, 161, 255, 0.2), transparent 40%),
-    #0b1118;
+  background: rgba(16, 23, 33, 0.86);
   box-shadow: var(--shadow);
 }
 
-.speed-display__arc {
-  position: absolute;
-  width: min(82vw, 450px);
-  aspect-ratio: 1;
-  border: 16px solid rgba(29, 161, 255, 0.13);
-  border-top-color: rgba(29, 161, 255, 0.85);
-  border-right-color: rgba(29, 161, 255, 0.44);
-  border-radius: 50%;
-  filter: drop-shadow(0 0 22px rgba(29, 161, 255, 0.2));
-  transform: rotate(-42deg);
+.energy-hero {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  min-height: 260px;
+  padding: 28px 18px 22px;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(124, 199, 255, 0.18), transparent 48%),
+    linear-gradient(160deg, rgba(124, 199, 255, 0.1), transparent 48%),
+    rgba(10, 16, 24, 0.92);
 }
 
-.speed-display__eyebrow,
-.speed-display__unit {
-  position: relative;
-  z-index: 1;
-  margin: 0;
+.energy-hero > span,
+.reaction-panel > span,
+.reaction-panel > strong,
+.metric-card__label,
+.metric-card__unit,
+.section-heading span,
+.multiplier-strip span,
+.risk-band span {
   color: var(--muted);
+  font-size: 0.74rem;
   font-weight: 900;
   letter-spacing: 0;
   text-transform: uppercase;
 }
 
-.speed-display__eyebrow {
-  align-self: end;
-  font-size: clamp(0.78rem, 3vw, 1rem);
+.energy-hero__readout {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
 }
 
-.speed-display__number {
-  position: relative;
-  z-index: 1;
-  align-self: center;
+.energy-hero__readout strong {
   color: #ffffff;
-  font-size: clamp(7rem, 29vw, 14rem);
+  font-size: clamp(5.4rem, 25vw, 11rem);
   font-variant-numeric: tabular-nums;
-  line-height: 0.86;
-  text-shadow: 0 0 34px rgba(29, 161, 255, 0.26);
+  line-height: 0.84;
+  text-shadow: 0 0 34px rgba(124, 199, 255, 0.2);
 }
 
-.speed-display__unit {
-  align-self: start;
+.energy-hero__readout em,
+.energy-hero__speed em {
   color: #d6e9f8;
-  font-size: clamp(1rem, 4vw, 1.35rem);
+  font-style: normal;
+  font-weight: 850;
 }
 
-.metric-grid {
+.energy-hero__readout em {
+  font-size: clamp(1.7rem, 7vw, 3rem);
+}
+
+.energy-hero__speed {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(70, 100, 132, 0.58);
+  border-radius: 8px;
+  background: rgba(5, 8, 12, 0.42);
+}
+
+.energy-hero__speed span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.energy-hero__speed strong {
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.risk-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px;
+  border-left-width: 5px;
+}
+
+.risk-band strong {
+  display: block;
+  margin-top: 3px;
+  color: #ffffff;
+  font-size: clamp(1.5rem, 7vw, 2.3rem);
+  line-height: 1;
+}
+
+.risk-band p {
+  margin: 0;
+  color: var(--soft);
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 850;
+  text-align: right;
+}
+
+.risk-band--low {
+  border-left-color: var(--green);
+}
+
+.risk-band--moderate {
+  border-left-color: var(--amber);
+}
+
+.risk-band--high {
+  border-left-color: var(--orange);
+}
+
+.risk-band--very-high {
+  border-left-color: var(--red);
+}
+
+.risk-band--extreme {
+  border-left-color: var(--maroon);
+}
+
+.reaction-panel {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 18px 14px;
+}
+
+.reaction-panel > strong {
+  color: #d7e2ec;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+}
+
+.reaction-panel__distance {
+  color: #ffffff;
+  font-size: clamp(4.6rem, 22vw, 8rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+}
+
+.car-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  min-height: 38px;
+  overflow: hidden;
+}
+
+.car-row svg {
+  width: clamp(27px, 8vw, 48px);
+  height: auto;
+  fill: #dce7f1;
+  opacity: 0.86;
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.car-row b {
+  color: #ffffff;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.multiplier-strip {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+}
+
+.multiplier-strip strong {
+  color: #ffffff;
+  font-size: clamp(2rem, 9vw, 3.3rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.analytics-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.analytics-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-}
-
-.metric-card,
-.comparison-card,
-.energy-gauge,
-.energy-graph {
-  border: 1px solid rgba(59, 82, 108, 0.72);
-  border-radius: 8px;
-  background: rgba(17, 24, 33, 0.84);
-  box-shadow: var(--shadow);
 }
 
 .metric-card {
@@ -219,22 +365,11 @@ button {
   padding: 13px;
 }
 
-.metric-card__label,
-.metric-card__unit,
-.section-heading span,
-.comparison-card span {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
 .metric-card__value {
   display: block;
   margin-top: 8px;
   color: white;
-  font-size: clamp(1.6rem, 7vw, 2.35rem);
+  font-size: clamp(1.55rem, 7vw, 2.25rem);
   font-variant-numeric: tabular-nums;
   line-height: 0.95;
 }
@@ -246,30 +381,11 @@ button {
 }
 
 .metric-card--accent {
-  background: linear-gradient(150deg, rgba(29, 161, 255, 0.22), rgba(17, 24, 33, 0.9));
+  background: linear-gradient(150deg, rgba(124, 199, 255, 0.18), rgba(17, 24, 33, 0.9));
 }
 
 .metric-card--warning {
-  border-color: rgba(250, 204, 21, 0.66);
-}
-
-.comparison-card {
-  margin-top: 12px;
-  padding: 14px;
-  background: linear-gradient(140deg, rgba(29, 161, 255, 0.14), rgba(17, 24, 33, 0.82));
-}
-
-.comparison-card strong {
-  display: block;
-  margin-top: 6px;
-  font-size: clamp(1.05rem, 4vw, 1.5rem);
-  line-height: 1.18;
-}
-
-.energy-gauge,
-.energy-graph {
-  margin-top: 12px;
-  padding: 14px;
+  border-color: rgba(191, 163, 75, 0.66);
 }
 
 .section-heading {
@@ -277,7 +393,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .section-heading strong {
@@ -285,82 +401,28 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
-.energy-gauge__track {
-  position: relative;
-  height: 20px;
-  overflow: hidden;
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--green) 0 18%, var(--amber) 18% 38%, var(--orange) 38% 64%, var(--red) 64% 100%);
+.mini-chart {
+  padding: 14px;
 }
 
-.energy-gauge__track::after {
-  position: absolute;
-  inset: 0;
-  background: rgba(8, 10, 13, 0.62);
-  content: "";
-}
-
-.energy-gauge__fill {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  border-radius: 6px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(29, 161, 255, 0.95));
-  box-shadow: 0 0 18px rgba(29, 161, 255, 0.55);
-  transition: width 360ms ease;
-}
-
-.energy-gauge__labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 800;
-}
-
-.energy-graph svg {
+.mini-chart svg {
   display: block;
   width: 100%;
   height: auto;
-  min-height: 190px;
 }
 
-.energy-graph__grid {
+.mini-chart__baseline {
   fill: none;
-  stroke: rgba(169, 181, 195, 0.28);
-  stroke-width: 1.5;
+  stroke: rgba(168, 179, 192, 0.2);
+  stroke-width: 1.4;
 }
 
-.energy-graph__quad-guide,
-.energy-graph__marker-line {
-  stroke: rgba(169, 181, 195, 0.16);
-  stroke-dasharray: 5 7;
-}
-
-.energy-graph__curve {
+.mini-chart__line {
   fill: none;
-  stroke: url("#curveGradient");
-  stroke-linecap: round;
-  stroke-width: 5;
-}
-
-.energy-graph__marker {
-  fill: #ffffff;
   stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
   stroke-width: 4;
-}
-
-.energy-graph text {
-  fill: var(--muted);
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.energy-graph p {
-  margin: 6px 0 0;
-  color: #d9e8f4;
-  font-weight: 800;
 }
 
 .trip-controls {
@@ -385,8 +447,8 @@ button {
 }
 
 .control-button--primary {
-  border-color: rgba(29, 161, 255, 0.8);
-  background: linear-gradient(135deg, #0a74c9, #1da1ff);
+  border-color: rgba(124, 199, 255, 0.8);
+  background: linear-gradient(135deg, #17699f, #58aee7);
   color: #ffffff;
 }
 
@@ -403,6 +465,8 @@ button {
 .settings-panel {
   width: min(440px, 100%);
   min-height: 100%;
+  max-height: 100svh;
+  overflow: auto;
   padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom))
     max(16px, env(safe-area-inset-left));
   border-left: 1px solid var(--line);
@@ -473,44 +537,51 @@ button {
 }
 
 @media (min-width: 760px) {
-  .dashboard-grid {
-    grid-template-columns: minmax(330px, 0.9fr) minmax(420px, 1.1fr);
+  .drive-dashboard {
+    grid-template-columns: minmax(360px, 1fr) minmax(330px, 0.86fr);
+    align-items: stretch;
   }
 
-  .speed-display {
-    min-height: 100%;
+  .gps-status--compact,
+  .energy-hero {
+    grid-column: 1;
   }
 
-  .app-shell {
-    padding-top: 18px;
+  .risk-band,
+  .reaction-panel,
+  .multiplier-strip {
+    grid-column: 2;
+  }
+
+  .gps-status--compact {
+    align-self: start;
+  }
+
+  .energy-hero {
+    min-height: 430px;
+  }
+
+  .reaction-panel {
+    min-height: 250px;
+  }
+
+  .analytics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (orientation: landscape) and (max-height: 540px) {
   .app-shell {
     display: grid;
-    grid-template-columns: minmax(230px, 0.9fr) minmax(330px, 1.1fr) minmax(210px, 0.82fr);
+    grid-template-columns: minmax(270px, 0.9fr) minmax(330px, 1.05fr) minmax(210px, 0.78fr);
     grid-template-rows: auto minmax(0, 1fr) 58px;
     grid-template-areas:
       "top top top"
-      "speed metrics graph"
-      "gps controls gauge";
+      "hero reaction risk"
+      "gps controls multiplier";
     gap: 8px 12px;
     padding: 8px max(14px, env(safe-area-inset-right)) 8px max(14px, env(safe-area-inset-left));
     overflow: hidden;
-  }
-
-  .top-bar h1 {
-    font-size: 1.36rem;
-  }
-
-  .top-bar p {
-    font-size: 0.68rem;
-  }
-
-  .top-bar .icon-button {
-    width: 42px;
-    height: 42px;
   }
 
   .top-bar {
@@ -518,92 +589,74 @@ button {
     padding-bottom: 0;
   }
 
-  .gps-status {
-    grid-area: gps;
-    margin-bottom: 0;
-    min-height: 0;
+  .top-bar h1 {
+    font-size: 1.34rem;
   }
 
-  .dashboard-grid {
+  .top-bar p {
+    font-size: 0.68rem;
+  }
+
+  .top-bar .icon-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .drive-dashboard {
     display: contents;
   }
 
-  .dashboard-grid__speed {
-    grid-area: speed;
+  .gps-status--compact {
+    grid-area: gps;
+    align-self: stretch;
   }
 
-  .metric-grid {
-    grid-area: metrics;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .speed-display {
+  .energy-hero {
+    grid-area: hero;
     min-height: 0;
-    height: 100%;
+    padding: 16px 12px;
   }
 
-  .speed-display__arc {
-    width: min(26vw, 300px);
-    border-width: 12px;
+  .energy-hero__readout strong {
+    font-size: clamp(4.4rem, 13vw, 7.4rem);
   }
 
-  .speed-display__number {
-    font-size: clamp(5.4rem, 14vw, 8rem);
+  .energy-hero__readout em {
+    font-size: 1.7rem;
   }
 
-  .speed-display__unit {
-    font-size: 1.05rem;
+  .risk-band {
+    grid-area: risk;
+    align-self: stretch;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
   }
 
-  .metric-card {
-    min-height: 78px;
-    padding: 10px;
+  .risk-band p {
+    text-align: left;
   }
 
-  .metric-card__value {
-    font-size: 1.55rem;
+  .reaction-panel {
+    grid-area: reaction;
+    min-height: 0;
+    padding: 12px;
   }
 
-  .comparison-card {
-    display: none;
+  .reaction-panel__distance {
+    font-size: clamp(4rem, 11vw, 6rem);
   }
 
-  .energy-gauge {
-    grid-area: gauge;
-    margin-top: 0;
+  .multiplier-strip {
+    grid-area: multiplier;
     padding: 8px;
   }
 
-  .energy-gauge .section-heading {
-    margin-bottom: 6px;
-  }
-
-  .energy-gauge__track {
-    height: 15px;
-  }
-
-  .energy-gauge__labels {
-    display: none;
-  }
-
-  .energy-graph {
-    grid-area: graph;
-    margin-top: 0;
-    padding: 10px;
-  }
-
-  .energy-graph svg {
-    min-height: 0;
-    max-height: 178px;
-  }
-
-  .energy-graph p {
-    font-size: 0.82rem;
-    line-height: 1.15;
+  .multiplier-strip strong {
+    font-size: 2rem;
   }
 
   .trip-controls {
-    position: static;
     grid-area: controls;
     align-self: stretch;
     margin-top: 0;
@@ -611,5 +664,10 @@ button {
 
   .trip-controls .control-button {
     min-height: 50px;
+  }
+
+  .analytics-panel {
+    grid-column: 1 / -1;
+    overflow: auto;
   }
 }

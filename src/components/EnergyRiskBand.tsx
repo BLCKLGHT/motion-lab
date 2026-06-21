@@ -3,9 +3,7 @@ import { energyMultiplier } from "../utils/physics";
 export type EnergyRiskLevel = "LOW" | "MODERATE" | "HIGH" | "VERY HIGH" | "EXTREME";
 
 interface EnergyRiskBandProps {
-  speedKmh: number;
-  massKg: number;
-  referenceSpeedKmh: number;
+  level: EnergyRiskLevel;
 }
 
 const riskPrompts: Record<EnergyRiskLevel, string> = {
@@ -14,6 +12,14 @@ const riskPrompts: Record<EnergyRiskLevel, string> = {
   HIGH: "Slow before hazards",
   "VERY HIGH": "Increase buffer",
   EXTREME: "Reduce speed"
+};
+
+const riskIcons: Record<EnergyRiskLevel, string> = {
+  LOW: "OK",
+  MODERATE: "!",
+  HIGH: "!!",
+  "VERY HIGH": "!!!",
+  EXTREME: "!"
 };
 
 export function getEnergyRiskLevel(speedKmh: number, massKg: number, referenceSpeedKmh: number): EnergyRiskLevel {
@@ -34,11 +40,12 @@ export function getEnergyRiskLevel(speedKmh: number, massKg: number, referenceSp
   return "EXTREME";
 }
 
-export function EnergyRiskBand({ speedKmh, massKg, referenceSpeedKmh }: EnergyRiskBandProps) {
-  const level = getEnergyRiskLevel(speedKmh, massKg, referenceSpeedKmh);
-
+export function EnergyRiskBand({ level }: EnergyRiskBandProps) {
   return (
     <section className={`risk-band risk-band--${level.toLowerCase().replace(" ", "-")}`} aria-label="Energy risk band">
+      <span className="risk-band__icon" aria-hidden="true">
+        {riskIcons[level]}
+      </span>
       <div>
         <span>Energy Risk</span>
         <strong>{level}</strong>

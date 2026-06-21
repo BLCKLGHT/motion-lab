@@ -8,6 +8,7 @@ import { ReactionDistance } from "./components/ReactionDistance";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TripControls } from "./components/TripControls";
 import { useGps } from "./hooks/useGps";
+import { useDemoGps } from "./hooks/useDemoGps";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useTrip } from "./hooks/useTrip";
 import { useWakeLock } from "./hooks/useWakeLock";
@@ -21,14 +22,17 @@ const DEFAULT_SETTINGS: VehicleSettings = {
   massKg: 2000,
   reactionTimeSeconds: 1.5,
   carLengthMetres: 5,
-  referenceSpeedKmh: DEFAULT_REFERENCE_SPEED_KMH
+  referenceSpeedKmh: DEFAULT_REFERENCE_SPEED_KMH,
+  demoMode: false
 };
 
 function App() {
-  const gpsReading = useGps();
   const wakeLockStatus = useWakeLock();
   const [storedSettings, setSettings] = useLocalStorage<VehicleSettings>("motion-lab-settings", DEFAULT_SETTINGS);
   const settings = { ...DEFAULT_SETTINGS, ...storedSettings };
+  const realGpsReading = useGps();
+  const demoGpsReading = useDemoGps(settings.demoMode);
+  const gpsReading = settings.demoMode ? demoGpsReading : realGpsReading;
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [activeView, setActiveView] = useState<"drive" | "analytics">("drive");
 
@@ -72,7 +76,7 @@ function App() {
 
       {activeView === "drive" ? (
         <section className="drive-dashboard">
-          <GpsStatus reading={gpsReading} compact />
+          <GpsStatus reading={gpsReading} compact demo={settings.demoMode} />
           <EnergyHero energyJoules={currentEnergyJoules} speedKmh={gpsReading.speedKmh} />
           <EnergyRiskBand speedKmh={gpsReading.speedKmh} massKg={settings.massKg} referenceSpeedKmh={settings.referenceSpeedKmh} />
           <ReactionDistance

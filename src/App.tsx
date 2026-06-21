@@ -1,84 +1,93 @@
-import { Settings } from "lucide-react";
+import { BarChart3, Gauge, Settings } from "lucide-react";
 import { useMemo, useState } from "react";
-import { EnergyGauge } from "./components/EnergyGauge";
-import { EnergyGraph } from "./components/EnergyGraph";
+import { AnalyticsPanel } from "./components/AnalyticsPanel";
+import { EnergyHero } from "./components/EnergyHero";
+import { EnergyRiskBand } from "./components/EnergyRiskBand";
 import { GpsStatus } from "./components/GpsStatus";
-import { MetricCard } from "./components/MetricCard";
+import { ReactionDistance } from "./components/ReactionDistance";
 import { SettingsPanel } from "./components/SettingsPanel";
-import { SpeedDisplay } from "./components/SpeedDisplay";
 import { TripControls } from "./components/TripControls";
 import { useGps } from "./hooks/useGps";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useTrip } from "./hooks/useTrip";
 import { useWakeLock } from "./hooks/useWakeLock";
 import type { VehicleSettings } from "./types/dashboard";
-import { formatDecimal, formatDistance, formatDuration, formatSpeed } from "./utils/format";
-import { energyMultiplier, energyUnit, kineticEnergyJoules, REFERENCE_SPEED_KMH } from "./utils/physics";
+import { formatDecimal } from "./utils/format";
+import { DEFAULT_REFERENCE_SPEED_KMH, energyMultiplier, kineticEnergyJoules, reactionDistanceMetres } from "./utils/physics";
 import "./styles.css";
 
 const DEFAULT_SETTINGS: VehicleSettings = {
   name: "Jeep Grand Cherokee",
-  massKg: 2000
+  massKg: 2000,
+  reactionTimeSeconds: 1.5,
+  carLengthMetres: 5,
+  referenceSpeedKmh: DEFAULT_REFERENCE_SPEED_KMH
 };
 
 function App() {
   const gpsReading = useGps();
   const wakeLockStatus = useWakeLock();
-  const [settings, setSettings] = useLocalStorage<VehicleSettings>("motion-lab-settings", DEFAULT_SETTINGS);
+  const [storedSettings, setSettings] = useLocalStorage<VehicleSettings>("motion-lab-settings", DEFAULT_SETTINGS);
+  const settings = { ...DEFAULT_SETTINGS, ...storedSettings };
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [activeView, setActiveView] = useState<"drive" | "analytics">("drive");
 
   const currentEnergyJoules = useMemo(
     () => kineticEnergyJoules(gpsReading.speedKmh, settings.massKg),
     [gpsReading.speedKmh, settings.massKg]
   );
-  const { stats, startTrip, pauseTrip, resetTrip } = useTrip(gpsReading, currentEnergyJoules);
-  const currentEnergy = energyUnit(currentEnergyJoules);
-  const multiplier = energyMultiplier(gpsReading.speedKmh, settings.massKg);
-  const gpsTone = gpsReading.accuracy !== null && gpsReading.accuracy > 25 ? "warning" : "default";
+  const reactionDistance = reactionDistanceMetres(gpsReading.speedKmh, settings.reactionTimeSeconds);
+  const { stats, startTrip, pauseTrip, resetTrip } = useTrip(gpsReading, currentEnergyJoules, reactionDistance);
+  const multiplier = energyMultiplier(gpsReading.speedKmh, settings.massKg, settings.referenceSpeedKmh);
 
   return (
     <main className="app-shell">
       <div className="top-bar">
         <div>
           <p>Motion Lab</p>
-          <h1>{settings.name}</h1>
+          <h1>{activeView === "drive" ? "Energy Awareness" : "Analytics"}</h1>
         </div>
-        <button className="icon-button" type="button" onClick={() => setSettingsOpen(true)} aria-label="Open settings">
-          <Settings size={22} />
-        </button>
+        <div className="top-bar__actions">
+          <button
+            className={`icon-button ${activeView === "drive" ? "icon-button--active" : ""}`}
+            type="button"
+            onClick={() => setActiveView("drive")}
+            aria-label="Show driving dashboard"
+          >
+            <Gauge size={22} />
+          </button>
+          <button
+            className={`icon-button ${activeView === "analytics" ? "icon-button--active" : ""}`}
+            type="button"
+            onClick={() => setActiveView("analytics")}
+            aria-label="Show analytics"
+          >
+            <BarChart3 size={22} />
+          </button>
+          <button className="icon-button" type="button" onClick={() => setSettingsOpen(true)} aria-label="Open settings">
+            <Settings size={22} />
+          </button>
+        </div>
       </div>
 
-      <GpsStatus reading={gpsReading} />
-
-      <section className="dashboard-grid">
-        <div className="dashboard-grid__speed">
-          <SpeedDisplay speedKmh={gpsReading.speedKmh} />
-        </div>
-
-        <div className="metric-grid">
-          <MetricCard label="Average Speed" value={formatSpeed(stats.averageSpeedKmh)} unit="km/h" />
-          <MetricCard label="Maximum Speed" value={formatSpeed(stats.maximumSpeedKmh)} unit="km/h" />
-          <MetricCard label="Distance Travelled" value={formatDistance(stats.distanceMeters)} />
-          <MetricCard label="Trip Time" value={formatDuration(stats.elapsedMs)} />
-          <MetricCard
-            label="GPS Accuracy"
-            value={gpsReading.accuracy !== null ? Math.round(gpsReading.accuracy).toString() : "--"}
-            unit="m"
-            tone={gpsTone}
+      {activeView === "drive" ? (
+        <section className="drive-dashboard">
+          <GpsStatus reading={gpsReading} compact />
+          <EnergyHero energyJoules={currentEnergyJoules} speedKmh={gpsReading.speedKmh} />
+          <EnergyRiskBand speedKmh={gpsReading.speedKmh} massKg={settings.massKg} referenceSpeedKmh={settings.referenceSpeedKmh} />
+          <ReactionDistance
+            distanceMetres={reactionDistance}
+            carLengthMetres={settings.carLengthMetres}
+            moving={gpsReading.speedKmh > 1}
           />
-          <MetricCard label="Kinetic Energy" value={currentEnergy.value} unit={currentEnergy.unit} tone="accent" />
-          <MetricCard label="Energy Multiplier" value={`${formatDecimal(multiplier, 1)}x`} unit={`vs ${REFERENCE_SPEED_KMH} km/h`} />
-          <MetricCard label="Highest Energy" value={energyUnit(stats.highestEnergyJoules).value} unit={energyUnit(stats.highestEnergyJoules).unit} />
-        </div>
-      </section>
-
-      <section className="comparison-card">
-        <span>Energy Comparison</span>
-        <strong>Current energy is {formatDecimal(multiplier, 1)}x greater than at {REFERENCE_SPEED_KMH} km/h.</strong>
-      </section>
-
-      <EnergyGauge speedKmh={gpsReading.speedKmh} massKg={settings.massKg} />
-      <EnergyGraph speedKmh={gpsReading.speedKmh} massKg={settings.massKg} />
+          <section className="multiplier-strip" aria-label="Energy multiplier">
+            <strong>{formatDecimal(multiplier, 1)}x</strong>
+            <span>energy vs {settings.referenceSpeedKmh} km/h</span>
+          </section>
+        </section>
+      ) : (
+        <AnalyticsPanel stats={stats} gpsReading={gpsReading} />
+      )}
 
       <TripControls state={stats.state} onStart={startTrip} onPause={pauseTrip} onReset={resetTrip} />
 

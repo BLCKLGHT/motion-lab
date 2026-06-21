@@ -33,6 +33,7 @@ export interface VehicleSettings {
   reactionTimeSeconds: number;
   carLengthMetres: number;
   referenceSpeedKmh: number;
+  demoMode: boolean;
 }
 
 export interface TripSample {

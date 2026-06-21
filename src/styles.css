@@ -418,11 +418,15 @@ button {
   overflow: hidden;
 }
 
-.car-row svg {
-  width: clamp(27px, 8vw, 48px);
-  height: auto;
-  fill: #dce7f1;
-  opacity: 0.86;
+.car-row__icon {
+  display: block;
+  width: clamp(30px, 8.5vw, 52px);
+  aspect-ratio: 1;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(124, 199, 255, 0.72));
+  filter: drop-shadow(0 0 10px rgba(124, 199, 255, 0.14));
+  mask: url("/assets/car-distance-icon.png") center / contain no-repeat;
+  opacity: 0.9;
   transition:
     opacity 180ms ease,
     transform 220ms ease;
@@ -833,8 +837,8 @@ button {
     min-height: 28px;
   }
 
-  .car-row svg {
-    width: clamp(24px, 5vw, 34px);
+  .car-row__icon {
+    width: clamp(23px, 5vw, 34px);
   }
 
   .multiplier-strip {

@@ -15,6 +15,7 @@ export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus 
   const [reactionTimeSeconds, setReactionTimeSeconds] = useState(settings.reactionTimeSeconds);
   const [carLengthMetres, setCarLengthMetres] = useState(settings.carLengthMetres);
   const [referenceSpeedKmh, setReferenceSpeedKmh] = useState(settings.referenceSpeedKmh);
+  const [demoMode, setDemoMode] = useState(settings.demoMode);
 
   if (!open) {
     return null;
@@ -26,7 +27,8 @@ export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus 
       massKg: Math.max(250, Math.min(10_000, Math.round(massKg))),
       reactionTimeSeconds: Math.max(0.5, Math.min(4, Number(reactionTimeSeconds.toFixed(1)))),
       carLengthMetres: Math.max(2, Math.min(12, Number(carLengthMetres.toFixed(1)))),
-      referenceSpeedKmh: Math.max(10, Math.min(140, Math.round(referenceSpeedKmh)))
+      referenceSpeedKmh: Math.max(10, Math.min(140, Math.round(referenceSpeedKmh))),
+      demoMode
     });
     onClose();
   };
@@ -109,6 +111,14 @@ export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus 
             />
             <strong>km/h</strong>
           </div>
+        </label>
+
+        <label className="settings-toggle">
+          <span>
+            <strong>Demo Drive</strong>
+            <em>Simulated winding highway</em>
+          </span>
+          <input type="checkbox" checked={demoMode} onChange={(event) => setDemoMode(event.target.checked)} />
         </label>
 
         <div className="settings-meta">

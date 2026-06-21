@@ -4,6 +4,7 @@ import { AnalyticsPanel } from "./components/AnalyticsPanel";
 import { EnergyHero } from "./components/EnergyHero";
 import { EnergyRiskBand } from "./components/EnergyRiskBand";
 import { GpsStatus } from "./components/GpsStatus";
+import { QuadraticEnergyCue } from "./components/QuadraticEnergyCue";
 import { ReactionDistance } from "./components/ReactionDistance";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TripControls } from "./components/TripControls";
@@ -79,6 +80,7 @@ function App() {
           <GpsStatus reading={gpsReading} compact demo={settings.demoMode} />
           <EnergyHero energyJoules={currentEnergyJoules} speedKmh={gpsReading.speedKmh} />
           <EnergyRiskBand speedKmh={gpsReading.speedKmh} massKg={settings.massKg} referenceSpeedKmh={settings.referenceSpeedKmh} />
+          <QuadraticEnergyCue speedKmh={gpsReading.speedKmh} />
           <ReactionDistance
             distanceMetres={reactionDistance}
             carLengthMetres={settings.carLengthMetres}

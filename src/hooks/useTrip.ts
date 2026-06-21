@@ -11,14 +11,23 @@ const emptyTrip: TripStats = {
   distanceMeters: 0,
   averageSpeedKmh: 0,
   maximumSpeedKmh: 0,
-  highestEnergyJoules: 0
+  highestEnergyJoules: 0,
+  samples: []
 };
 
-export function useTrip(reading: GpsReading, currentEnergyJoules: number) {
+function normalizeTripStats(stats: TripStats): TripStats {
+  return {
+    ...emptyTrip,
+    ...stats,
+    samples: Array.isArray(stats.samples) ? stats.samples : []
+  };
+}
+
+export function useTrip(reading: GpsReading, currentEnergyJoules: number, reactionDistanceMetres: number) {
   const [stats, setStats] = useState<TripStats>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? (JSON.parse(stored) as TripStats) : emptyTrip;
+      return stored ? normalizeTripStats(JSON.parse(stored) as TripStats) : emptyTrip;
     } catch {
       return emptyTrip;
     }
@@ -49,6 +58,19 @@ export function useTrip(reading: GpsReading, currentEnergyJoules: number) {
       const nextDistance = current.distanceMeters + (Number.isFinite(addedDistance) ? addedDistance : 0);
       const elapsedMs = activeStartedAtRef.current ? Date.now() - activeStartedAtRef.current : current.elapsedMs;
       const hours = elapsedMs / 3_600_000;
+      const lastSample = current.samples.length > 0 ? current.samples[current.samples.length - 1] : undefined;
+      const shouldSample = !lastSample || elapsedMs - lastSample.elapsedMs >= 1000;
+      const nextSamples = shouldSample
+        ? [
+            ...current.samples,
+            {
+              elapsedMs,
+              speedKmh: reading.speedKmh,
+              energyJoules: currentEnergyJoules,
+              reactionDistanceMetres
+            }
+          ].slice(-900)
+        : current.samples;
 
       return {
         ...current,
@@ -56,12 +78,13 @@ export function useTrip(reading: GpsReading, currentEnergyJoules: number) {
         distanceMeters: nextDistance,
         averageSpeedKmh: hours > 0 ? nextDistance / 1000 / hours : 0,
         maximumSpeedKmh: Math.max(current.maximumSpeedKmh, reading.speedKmh),
-        highestEnergyJoules: Math.max(current.highestEnergyJoules, currentEnergyJoules)
+        highestEnergyJoules: Math.max(current.highestEnergyJoules, currentEnergyJoules),
+        samples: nextSamples
       };
     });
 
     previousCoordinateRef.current = coordinate;
-  }, [currentEnergyJoules, reading, stats.state]);
+  }, [currentEnergyJoules, reactionDistanceMetres, reading, stats.state]);
 
   useEffect(() => {
     if (stats.state !== "running") {

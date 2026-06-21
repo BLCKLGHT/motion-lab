@@ -2,7 +2,7 @@ import { BarChart3, Gauge, Settings } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AnalyticsPanel } from "./components/AnalyticsPanel";
 import { EnergyHero } from "./components/EnergyHero";
-import { EnergyRiskBand } from "./components/EnergyRiskBand";
+import { EnergyRiskBand, getEnergyRiskLevel } from "./components/EnergyRiskBand";
 import { GpsStatus } from "./components/GpsStatus";
 import { QuadraticEnergyCue } from "./components/QuadraticEnergyCue";
 import { ReactionDistance } from "./components/ReactionDistance";
@@ -44,9 +44,11 @@ function App() {
   const reactionDistance = reactionDistanceMetres(gpsReading.speedKmh, settings.reactionTimeSeconds);
   const { stats, startTrip, pauseTrip, resetTrip } = useTrip(gpsReading, currentEnergyJoules, reactionDistance);
   const multiplier = energyMultiplier(gpsReading.speedKmh, settings.massKg, settings.referenceSpeedKmh);
+  const riskLevel = getEnergyRiskLevel(gpsReading.speedKmh, settings.massKg, settings.referenceSpeedKmh);
+  const riskClassName = riskLevel.toLowerCase().replace(" ", "-");
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell app-shell--risk-${riskClassName}`}>
       <div className="top-bar">
         <div>
           <p>Motion Lab</p>
@@ -78,8 +80,8 @@ function App() {
       {activeView === "drive" ? (
         <section className="drive-dashboard">
           <GpsStatus reading={gpsReading} compact demo={settings.demoMode} />
-          <EnergyHero energyJoules={currentEnergyJoules} speedKmh={gpsReading.speedKmh} />
-          <EnergyRiskBand speedKmh={gpsReading.speedKmh} massKg={settings.massKg} referenceSpeedKmh={settings.referenceSpeedKmh} />
+          <EnergyHero energyJoules={currentEnergyJoules} speedKmh={gpsReading.speedKmh} riskLevel={riskLevel} />
+          <EnergyRiskBand level={riskLevel} />
           <QuadraticEnergyCue speedKmh={gpsReading.speedKmh} />
           <ReactionDistance
             distanceMetres={reactionDistance}
@@ -92,7 +94,14 @@ function App() {
           </section>
         </section>
       ) : (
-        <AnalyticsPanel stats={stats} gpsReading={gpsReading} />
+        <AnalyticsPanel
+          stats={stats}
+          gpsReading={gpsReading}
+          currentEnergyJoules={currentEnergyJoules}
+          reactionDistanceMetres={reactionDistance}
+          demoMode={settings.demoMode}
+          vehicleMassKg={settings.massKg}
+        />
       )}
 
       <TripControls state={stats.state} onStart={startTrip} onPause={pauseTrip} onReset={resetTrip} />

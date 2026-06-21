@@ -24,9 +24,20 @@ export interface TripStats {
   averageSpeedKmh: number;
   maximumSpeedKmh: number;
   highestEnergyJoules: number;
+  samples: TripSample[];
 }
 
 export interface VehicleSettings {
   name: string;
   massKg: number;
+  reactionTimeSeconds: number;
+  carLengthMetres: number;
+  referenceSpeedKmh: number;
+}
+
+export interface TripSample {
+  elapsedMs: number;
+  speedKmh: number;
+  energyJoules: number;
+  reactionDistanceMetres: number;
 }

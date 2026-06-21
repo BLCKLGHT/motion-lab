@@ -12,6 +12,9 @@ interface SettingsPanelProps {
 
 export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus }: SettingsPanelProps) {
   const [massKg, setMassKg] = useState(settings.massKg);
+  const [reactionTimeSeconds, setReactionTimeSeconds] = useState(settings.reactionTimeSeconds);
+  const [carLengthMetres, setCarLengthMetres] = useState(settings.carLengthMetres);
+  const [referenceSpeedKmh, setReferenceSpeedKmh] = useState(settings.referenceSpeedKmh);
 
   if (!open) {
     return null;
@@ -20,7 +23,10 @@ export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus 
   const handleSave = () => {
     onSave({
       ...settings,
-      massKg: Math.max(250, Math.min(10_000, Math.round(massKg)))
+      massKg: Math.max(250, Math.min(10_000, Math.round(massKg))),
+      reactionTimeSeconds: Math.max(0.5, Math.min(4, Number(reactionTimeSeconds.toFixed(1)))),
+      carLengthMetres: Math.max(2, Math.min(12, Number(carLengthMetres.toFixed(1)))),
+      referenceSpeedKmh: Math.max(10, Math.min(140, Math.round(referenceSpeedKmh)))
     });
     onClose();
   };
@@ -58,6 +64,53 @@ export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus 
           </div>
         </label>
 
+        <label className="settings-field">
+          <span>Reaction Time</span>
+          <div className="settings-field__with-unit">
+            <input
+              inputMode="decimal"
+              min="0.5"
+              max="4"
+              step="0.1"
+              type="number"
+              value={reactionTimeSeconds}
+              onChange={(event) => setReactionTimeSeconds(Number(event.target.value))}
+            />
+            <strong>s</strong>
+          </div>
+        </label>
+
+        <label className="settings-field">
+          <span>Car Length</span>
+          <div className="settings-field__with-unit">
+            <input
+              inputMode="decimal"
+              min="2"
+              max="12"
+              step="0.1"
+              type="number"
+              value={carLengthMetres}
+              onChange={(event) => setCarLengthMetres(Number(event.target.value))}
+            />
+            <strong>m</strong>
+          </div>
+        </label>
+
+        <label className="settings-field">
+          <span>Reference Speed</span>
+          <div className="settings-field__with-unit">
+            <input
+              inputMode="numeric"
+              min="10"
+              max="140"
+              type="number"
+              value={referenceSpeedKmh}
+              onChange={(event) => setReferenceSpeedKmh(Number(event.target.value))}
+            />
+            <strong>km/h</strong>
+          </div>
+        </label>
+
         <div className="settings-meta">
           <span>Screen wake lock</span>
           <strong>{wakeLockStatus}</strong>
@@ -69,8 +122,8 @@ export function SettingsPanel({ open, settings, onClose, onSave, wakeLockStatus 
         </button>
 
         <p className="settings-disclaimer">
-          This application is for educational purposes only. GPS speed is approximate and must not be relied upon as a certified vehicle
-          speedometer. Always obey road rules and use your vehicle's instruments.
+          This app is for driver awareness and education only. It does not predict crash outcomes, replace safe driving judgement, or
+          replace your vehicle's instruments. Always obey road laws, posted signs, and road conditions.
         </p>
       </aside>
     </div>

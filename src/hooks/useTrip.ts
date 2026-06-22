@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Coordinate, GpsReading, TripStats } from "../types/dashboard";
 import { haversineDistanceMeters } from "../utils/gps";
+import { kmhToMps } from "../utils/physics";
 
 const STORAGE_KEY = "motion-lab-trip";
 
@@ -40,7 +41,10 @@ export function useTrip(reading: GpsReading, currentEnergyJoules: number, reacti
   }, [stats]);
 
   useEffect(() => {
-    if (stats.state !== "running" || reading.status === "denied" || reading.status === "unavailable") {
+    const hasUsableFix =
+      reading.status === "locked" || reading.status === "excellent" || reading.status === "poor";
+
+    if (stats.state !== "running" || !hasUsableFix) {
       previousCoordinateRef.current = null;
       return;
     }
@@ -53,8 +57,15 @@ export function useTrip(reading: GpsReading, currentEnergyJoules: number, reacti
 
     setStats((current) => {
       const previous = previousCoordinateRef.current;
+      const elapsedSeconds =
+        previous && coordinate.timestamp > previous.timestamp ? (coordinate.timestamp - previous.timestamp) / 1000 : 0;
+      const coordinateDistance =
+        previous && elapsedSeconds > 0 ? haversineDistanceMeters(previous, coordinate) : 0;
+      const speedDistance = elapsedSeconds > 0 ? kmhToMps(reading.speedKmh) * elapsedSeconds : 0;
+      const plausibleCoordinateDistance =
+        Number.isFinite(coordinateDistance) && coordinateDistance <= Math.max(120, speedDistance * 4 + 40);
       const addedDistance =
-        previous && coordinate.timestamp !== previous.timestamp ? haversineDistanceMeters(previous, coordinate) : 0;
+        plausibleCoordinateDistance && coordinateDistance >= 0.5 ? coordinateDistance : speedDistance;
       const nextDistance = current.distanceMeters + (Number.isFinite(addedDistance) ? addedDistance : 0);
       const elapsedMs = activeStartedAtRef.current ? Date.now() - activeStartedAtRef.current : current.elapsedMs;
       const hours = elapsedMs / 3_600_000;

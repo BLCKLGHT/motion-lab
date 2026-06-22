@@ -132,6 +132,32 @@ button {
   gap: 12px;
 }
 
+.drive-frame {
+  display: grid;
+  gap: 10px;
+  touch-action: pan-y;
+}
+
+.drive-pager {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  min-height: 18px;
+}
+
+.drive-pager__dot {
+  width: 28px;
+  height: 5px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(168, 179, 192, 0.3);
+}
+
+.drive-pager__dot--active {
+  background: #ffffff;
+  box-shadow: 0 0 14px rgba(124, 199, 255, 0.4);
+}
+
 .gps-status {
   display: flex;
   align-items: center;
@@ -180,6 +206,7 @@ button {
 
 .energy-hero,
 .reaction-panel,
+.braking-focus,
 .x2-cue,
 .risk-band,
 .multiplier-strip,
@@ -189,6 +216,193 @@ button {
   border-radius: 8px;
   background: rgba(16, 23, 33, 0.86);
   box-shadow: var(--shadow);
+}
+
+.braking-focus {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: min(680px, calc(100svh - 164px));
+  overflow: hidden;
+  border-color: rgba(124, 199, 255, 0.36);
+  background:
+    radial-gradient(circle at 28% 34%, rgba(124, 199, 255, 0.13), transparent 36%),
+    radial-gradient(circle at 84% 78%, rgba(185, 74, 74, 0.16), transparent 34%),
+    linear-gradient(150deg, rgba(11, 17, 25, 0.98), rgba(7, 10, 15, 0.96));
+}
+
+.braking-focus__speed {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  min-width: 78px;
+  padding: 9px 10px;
+  border: 1px solid rgba(124, 199, 255, 0.34);
+  border-radius: 8px;
+  background: rgba(7, 10, 15, 0.76);
+  backdrop-filter: blur(14px);
+}
+
+.braking-focus__speed strong {
+  color: #ffffff;
+  font-size: clamp(1.55rem, 7vw, 2.65rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+}
+
+.braking-focus__speed span,
+.braking-focus__distance > span,
+.braking-focus__distance p,
+.braking-focus__distance em,
+.braking-focus__energy p {
+  color: var(--muted);
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.braking-focus__speed span {
+  font-size: 0.6rem;
+}
+
+.braking-focus__distance {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  min-height: 430px;
+  padding: 54px 18px 24px;
+}
+
+.braking-focus__distance > span {
+  color: #e9f6ff;
+  font-size: clamp(1rem, 5vw, 1.5rem);
+}
+
+.braking-focus__cars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.8vw, 12px);
+  width: min(100%, 620px);
+  min-height: 66px;
+}
+
+.braking-focus__cars i {
+  display: block;
+  width: clamp(34px, 9.4vw, 72px);
+  aspect-ratio: 1;
+  background: linear-gradient(180deg, #ffffff, #7cc7ff 76%);
+  filter: drop-shadow(0 0 14px rgba(124, 199, 255, 0.22));
+}
+
+.braking-focus__cars b {
+  color: #ffffff;
+  font-size: clamp(1.8rem, 7vw, 3rem);
+  line-height: 1;
+}
+
+.braking-focus__distance strong {
+  color: #ffffff;
+  font-size: clamp(8rem, 40vw, 17rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.72;
+}
+
+.braking-focus__distance p {
+  margin: 0;
+  color: #f5fbff;
+  font-size: clamp(1.4rem, 7vw, 3rem);
+  line-height: 0.9;
+}
+
+.braking-focus__distance em {
+  font-size: clamp(0.9rem, 4vw, 1.3rem);
+  font-style: normal;
+}
+
+.braking-focus__energy {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  min-height: 250px;
+  padding: 22px 18px 26px;
+  border-top: 1px solid rgba(168, 179, 192, 0.18);
+  background: rgba(4, 7, 11, 0.26);
+}
+
+.braking-focus__energy > span {
+  color: #ffffff;
+  font-size: clamp(2rem, 9vw, 4rem);
+  font-weight: 920;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.92;
+}
+
+.braking-focus__energy strong {
+  color: #ffd6d6;
+  font-size: clamp(1.65rem, 7vw, 3rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+}
+
+.braking-focus__energy p {
+  max-width: 16ch;
+  margin: 0;
+  text-align: center;
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.dynamite {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  width: 120px;
+  height: 92px;
+  margin-top: 6px;
+  transform: rotate(-8deg);
+}
+
+.dynamite i {
+  display: block;
+  width: 25px;
+  height: 72px;
+  border: 1px solid rgba(255, 214, 214, 0.52);
+  border-radius: 5px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.26), transparent 38%),
+    linear-gradient(180deg, #d96161, #8f252f);
+  box-shadow: 0 10px 24px rgba(185, 74, 74, 0.26);
+}
+
+.dynamite::before {
+  position: absolute;
+  right: 8px;
+  bottom: 16px;
+  width: 76px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(24, 14, 13, 0.82);
+  content: "";
+}
+
+.dynamite b {
+  position: absolute;
+  right: -2px;
+  top: 7px;
+  width: 32px;
+  height: 32px;
+  background: #ffe9a8;
+  clip-path: polygon(50% 0, 61% 35%, 98% 20%, 72% 50%, 100% 77%, 61% 65%, 50% 100%, 38% 65%, 0 78%, 27% 50%, 2% 20%, 39% 35%);
+  filter: drop-shadow(0 0 12px rgba(255, 215, 111, 0.5));
 }
 
 .energy-hero {
@@ -954,6 +1168,22 @@ button {
     align-items: stretch;
   }
 
+  .braking-focus {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+    min-height: min(620px, calc(100svh - 164px));
+  }
+
+  .braking-focus__distance {
+    min-height: 0;
+    border-right: 1px solid rgba(168, 179, 192, 0.18);
+  }
+
+  .braking-focus__energy {
+    align-content: end;
+    min-height: 0;
+    border-top: 0;
+  }
+
   .gps-status--compact,
   .energy-hero {
     grid-column: 1;
@@ -1019,6 +1249,94 @@ button {
 
   .drive-dashboard {
     display: contents;
+  }
+
+  .drive-frame {
+    display: contents;
+  }
+
+  .braking-focus {
+    grid-column: 1 / -1;
+    grid-row: 2 / 4;
+    grid-template-columns: minmax(0, 1fr) minmax(165px, 0.35fr);
+    min-height: 0;
+  }
+
+  .braking-focus__speed {
+    top: 8px;
+    right: 8px;
+    min-width: 62px;
+    padding: 6px 8px;
+  }
+
+  .braking-focus__speed strong {
+    font-size: 1.55rem;
+  }
+
+  .braking-focus__distance {
+    gap: 6px;
+    min-height: 0;
+    padding: 32px 10px 10px;
+  }
+
+  .braking-focus__distance > span {
+    font-size: 0.92rem;
+  }
+
+  .braking-focus__cars {
+    min-height: 36px;
+  }
+
+  .braking-focus__cars i {
+    width: clamp(24px, 5vw, 42px);
+  }
+
+  .braking-focus__distance strong {
+    font-size: clamp(6rem, 17vw, 10.2rem);
+  }
+
+  .braking-focus__distance p {
+    font-size: clamp(1.1rem, 3.4vw, 1.9rem);
+  }
+
+  .braking-focus__distance em {
+    font-size: 0.75rem;
+  }
+
+  .braking-focus__energy {
+    gap: 5px;
+    padding: 38px 10px 10px;
+  }
+
+  .braking-focus__energy > span {
+    font-size: clamp(1.45rem, 4vw, 2.25rem);
+  }
+
+  .braking-focus__energy strong {
+    font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+  }
+
+  .braking-focus__energy p {
+    font-size: 0.54rem;
+  }
+
+  .dynamite {
+    width: 82px;
+    height: 66px;
+  }
+
+  .dynamite i {
+    width: 17px;
+    height: 50px;
+  }
+
+  .dynamite b {
+    width: 23px;
+    height: 23px;
+  }
+
+  .drive-pager {
+    display: none;
   }
 
   .gps-status--compact {

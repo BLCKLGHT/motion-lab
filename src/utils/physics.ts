@@ -1,4 +1,5 @@
 export const DEFAULT_REFERENCE_SPEED_KMH = 50;
+export const JOULES_PER_DYNAMITE_STICK = 1_000_000;
 
 export function kmhToMps(speedKmh: number): number {
   return speedKmh / 3.6;
@@ -50,4 +51,12 @@ export function energyUnit(joules: number): { value: string; unit: string } {
   }
 
   return { value: Math.round(joules).toLocaleString(), unit: "J" };
+}
+
+export function dynamiteStickEquivalent(joules: number): number {
+  if (joules <= 0) {
+    return 0;
+  }
+
+  return joules / JOULES_PER_DYNAMITE_STICK;
 }

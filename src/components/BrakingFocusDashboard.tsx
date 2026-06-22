@@ -30,6 +30,7 @@ export function BrakingFocusDashboard({
   const totalCars = moving ? carLengthCount(animatedDistance, carLengthMetres) : 0;
   const visibleCars = Math.min(10, totalCars);
   const energy = energyUnit(animatedEnergy);
+  // Energy context only; this is not a crash outcome or blast prediction.
   const stickCount = dynamiteStickEquivalent(animatedEnergy);
 
   return (
